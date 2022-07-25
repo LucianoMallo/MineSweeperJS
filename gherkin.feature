@@ -20,9 +20,20 @@ Scenario: Clicking on an square with a mine
 When the user click on a <box>
 Then the <box> changes to an image of a bomb
 And the timer on the <timer_screen> stops
-And all the <mine_box> changes to an image of a bomb
+And all the <mine_boxs> changes to an image of a bomb
+And all botton are disable excepts the <emoji_button>
+
+Scenario: Clicking emoji button
+When the user click on a <emoji_button>
+Then the Default display screen is shown
+
 
 Scenario: Clicking on an square without a mine
 When the user click on a <box>
-Then the <box> changes to an image of a numer that represents the number of mines around that <box>
+Then the <box> changes to an image of a numer that represents the number of <mine_boxs> around that <box>
 
+Scenario: Putting a flag on a box
+When the user click with the right click on a <box>
+Then image of a red flag it's pose on the selected <box>
+
+Scenario: 
