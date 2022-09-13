@@ -5,6 +5,7 @@ Not open boxs: "-"
 Mines: "*"
 Clear_box: "0"
 box with Flag: "F"
+question mark: "?"
 Numbers: <sum_number_of_mines_around>
 board_to_test    a b c d e f g
                ---------------
@@ -19,12 +20,6 @@ Background:
     Given a user opens the app
     Given the board    
               
-
-Scenario: Default display screen
-Then in the timer screen should be shown a "000" 
-And in the mines screen should be shown "10"
-And no square should be marked
-And all buttons should be enabled
 
 Scenario Outline: Revealing a box with a mine
 Given the board is loaded with the value: "<board_to_test>"
@@ -70,7 +65,7 @@ And the <box> should show <sum_number_of_mines_around>
 |  g5 |         0                |
 
 Scenario: Putting a flag on a box with suspected mine
-When the user put a flag on : "a1"
+When the user puts a flag on : "a1"
 Then the box "a1" shows "F"
 And the number on the <mines_screen> reduce by "1"
 
@@ -78,6 +73,16 @@ Scenario: Removing a flag on a box
 When the user remove on : "a1"
 Then the box "a1" shows "-"
 And the number on the <mines_screen> increase by "1"
+
+Scenario: Putting a question mark on a box 
+When the user puts a flag on : "a1"
+Then the box "a1" shows "?"
+And the number on the <mines_screen> reduce by "1"
+
+Scenario: Removing a question mark on a box
+When the user puts a flag on : "a1"
+Then the box "a1" shows "-"
+And the number on the <mines_screen> reduce by "1"
 
 Scenario: Winning by putting a flag on all box with a mine
 Given the user put a flag on : "a1"
@@ -154,4 +159,8 @@ Scenario: starting the counter
 When the user Reveal a "g5"
 Then the <timer_screen> start a count with the seconds passed
 
-
+Scenario: Default display screen
+Then in the timer screen should be shown a "000" 
+And in the mines screen should be shown "10"
+And no square should be marked
+And all buttons should be enabled
