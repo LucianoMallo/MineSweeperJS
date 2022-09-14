@@ -15,10 +15,8 @@ board_to_test    a b c d e f g
               4| 2 3 3 3 3 2 1|
               5| 0 0 0 0 0 0 0|
 
-
 Background: 
-    Given a user opens the app
-    Given the board    
+    Given a user opens the app 
               
 
 Scenario Outline: Revealing a box with a mine
@@ -67,22 +65,20 @@ And the <box> should show <sum_number_of_mines_around>
 Scenario: Putting a flag on a box with suspected mine
 When the user puts a flag on : "a1"
 Then the box "a1" shows "F"
-And the number on the <mines_screen> reduce by "1"
+And the number on the <mines_screen> should show the value: "9"
 
 Scenario: Removing a flag on a box
 When the user remove on : "a1"
 Then the box "a1" shows "-"
-And the number on the <mines_screen> increase by "1"
+And the number on the <mines_screen> should show the value: "10"
 
 Scenario: Putting a question mark on a box 
 When the user puts a flag on : "a1"
 Then the box "a1" shows "?"
-And the number on the <mines_screen> reduce by "1"
 
 Scenario: Removing a question mark on a box
 When the user puts a flag on : "a1"
 Then the box "a1" shows "-"
-And the number on the <mines_screen> reduce by "1"
 
 Scenario: Winning by putting a flag on all box with a mine
 Given the user put a flag on : "a1"
@@ -127,8 +123,8 @@ And the user reveal the "g5"
 Then the displays shows a winning message
 
 
-Scenario: Revealing a box without a mine around
-When the user click the "right click" on "d8" box
+Scenario: Reavealing a cell with no mine around - Revealing surrounding cells (recursively)
+When the user reveal the "d8" box
 Then the box "g5" opens
 And the box "f5" opens
 And the box "e5" opens
@@ -144,19 +140,15 @@ And the box "c4" opens
 And the box "b4" opens
 And the box "a4" opens
 
-Scenario: Clicking emoji button
-When the user click on a <emoji_button>
+Scenario: hitting emoji button
+When the user hits the <emoji_button>
 Then in the timer screen should be shown a 000 
 And in the mines screen should be shown <number_of_mines>
 And no box should be marked
 And all buttons should be enabled
 
-Scenario: Clicking on timer screen and mines screen
-When the user clicks on the timer or mines screen
-Then nothing happens
-
 Scenario: starting the counter
-When the user Reveal a "g5"
+When the user reveal the "g5" box
 Then the <timer_screen> start a count with the seconds passed
 
 Scenario: Default display screen

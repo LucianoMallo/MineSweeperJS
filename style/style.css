@@ -8,6 +8,8 @@ h2, h3{
 
 #box {
     text-align: center;
+    
+   
 }
 
 #field table {
@@ -16,6 +18,7 @@ h2, h3{
     font-family: san-serif;
     font-weight: bold;
     display: inline-block;
+    
 }
 
 #field table td {
@@ -25,6 +28,9 @@ h2, h3{
     height: 30px;
     min-height: 30px;
     border: 1px solid black;    
+    box-shadow: inset 3px 3px 0 0 rgba(255, 255, 255, 0.5),
+        inset -3px -3px 0 0 rgba(0, 0, 0, 0.5);
+
 }
 
 button {
@@ -34,4 +40,6 @@ button {
     color: black;
     font-weight: bolder;
     border-radius: 20px 20px 20px 20px;
+    box-shadow: inset 3px 3px 0 0 rgba(255, 255, 255, 0.5),
+        inset -3px -3px 0 0 rgba(0, 0, 0, 0.5);
 }
