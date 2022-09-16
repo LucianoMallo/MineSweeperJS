@@ -7,17 +7,22 @@ Feature: Minesweeper
     box with Flag: "F"
     question mark: "?"
     Numbers: <sum_number_of_mines_around>
-    <board_to_test>=       a b c d e f g
-                         ---------------
-                        1| * * * * * * *|
-                        2| * 8 * 7 6 5 4|
-                        3| * * * * * * 1|
-                        4| 2 3 3 3 3 2 1|
-                        5| 0 0 0 0 0 0 0|
+    <board_to_test> =       a b c d e f g
+    ---------------
+    1| * * * * * * *|
+    2| * 8 * 7 6 5 4|
+    3| * * * * * * 1|
+    4| 2 3 3 3 3 2 1|
+    5| 0 0 0 0 0 0 0|
 
     Background:
         Given a user opens the app
-
+        Given the board is loaded with the value:
+            | * * * * * * * |
+            | * 8 * 7 6 5 4 |
+            | * * * * * * 1 |
+            | 2 3 3 3 3 2 1 |
+            | 0 0 0 0 0 0 0 |
 
     Scenario: Default display screen
         Then in the timer screen should be shown a "000"
@@ -54,7 +59,7 @@ Feature: Minesweeper
     Scenario: Putting a question mark on a box
         When the user puts a flag on : "a1"
         Then the box "a1" shows "?"
-        
+
 
     Scenario: Removing a question mark on a box
         When the user puts a flag on : "a1"
@@ -102,6 +107,7 @@ Feature: Minesweeper
             | f2  | 5                          |
             | g2  | 4                          |
             | b4  | 3                          |
+            | f4  | 2                          |
             | g3  | 1                          |
             | g5  | 0                          |
 
