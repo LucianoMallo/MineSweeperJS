@@ -1,0 +1,14 @@
+{
+  "scripts": {
+    "test": "cucumber-js --require cucumber.conf.js --require tests/steps/**/*.steps.js --format @cucumber/pretty-formatter --format html:tests/reports/cucumber-report.html --tags \"not @Manual\" --parallel 4"
+  },
+  "dependencies": {
+    "yarn": "^1.22.19"
+  },
+  "devDependencies": {
+    "@cucumber/cucumber": "^8.5.3",
+    "@cucumber/pretty-formatter": "^1.0.0",
+    "@playwright/test": "^1.25.2",
+    "playwright": "^1.25.2"
+  }
+}
