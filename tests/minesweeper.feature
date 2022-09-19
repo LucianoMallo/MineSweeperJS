@@ -1,19 +1,20 @@
 Feature: Minesweeper
 
-
+'
     Not open boxs: "-"
     Mines: "*"
     Clear_box: "0"
     box with Flag: "F"
     question mark: "?"
     Numbers: <sum_number_of_mines_around>
-    <board_to_test> =       a b c d e f g
-    ---------------
-    1| * * * * * * *|
-    2| * 8 * 7 6 5 4|
-    3| * * * * * * 1|
-    4| 2 3 3 3 3 2 1|
-    5| 0 0 0 0 0 0 0|
+    <board_to_test>:      a b c d e f g
+                        ---------------
+                        1| * * * * * * *|
+                        2| * 8 * 7 6 5 4|
+                        3| * * * * * * 1|
+                        4| 2 3 3 3 3 2 1|
+                        5| 0 0 0 0 0 0 0|
+'
 
     Background:
         Given a user opens the app
@@ -23,10 +24,10 @@ Feature: Minesweeper
             | * * * * * * 1 |
             | 2 3 3 3 3 2 1 |
             | 0 0 0 0 0 0 0 |
-
+@prueba
     Scenario: Default display screen
-        Then in the timer screen should be shown a "000"
-        And in the mines screen should be shown "10"
+        Then in the timer screen should be shown a : "000"
+        And in the mines screen should be shown : "10"
         And no square should be marked
         And all buttons should be enabled
 

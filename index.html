@@ -4,17 +4,27 @@
     <meta charset="UTF-8">
     <link type="text/css" rel="stylesheet" href="style/style.css">
     <title>Minesweeper</title>
-    <script src="ZZscripts/index.js"></script>
+    <script src="scripts/index.js"></script>
 </head>
 <body>
     <div id="box">
         <h2>MINESWEEPER!</h2><hr><br><br>
-        <div id="lost" style="display: none;">
+
+        <div id="Mines_Screen" style="display: none;" data-testid="Mines_Screen" value="10">10</div>
+
+        <div id="Timer_Screen" style="display: none;" data-testid="Timer_Screen" value="000">000</div>
+
+        <div id="Lost" style="display: none;">
           <button id="new-game-button" type="button" onclick="reload()">Start Again</button>
-        </div>        
-           <div id="field"></div>
-           <br>
-          
+        </div>
+               
+           <div id="field" data-testid="field" value='[
+           ["*", "*", "*", "*", "*", "*", "*"],
+           ["*", "8", "*", "7", "6", "5", "4"],
+           ["*", "*", "*", "*", "*", "*", "1"],
+           ["2", "3", "3", "3", "3", "2", "1"],
+           ["0", "0", "0", "0", "0", "0", "0"],
+         ]';></div>         
      </div>
 </body>
 </html>
