@@ -1,6 +1,6 @@
 Feature: Minesweeper
 
-'
+    '
     Not open boxs: "-"
     Mines: "*"
     Clear_box: "0"
@@ -8,13 +8,13 @@ Feature: Minesweeper
     question mark: "?"
     Numbers: <sum_number_of_mines_around>
     <board_to_test>:      a b c d e f g
-                        ---------------
-                        1| * * * * * * *|
-                        2| * 8 * 7 6 5 4|
-                        3| * * * * * * 1|
-                        4| 2 3 3 3 3 2 1|
-                        5| 0 0 0 0 0 0 0|
-'
+    ---------------
+    1| * * * * * * *|
+    2| * 8 * 7 6 5 4|
+    3| * * * * * * 1|
+    4| 2 3 3 3 3 2 1|
+    5| 0 0 0 0 0 0 0|
+    '
 
     Background:
         Given a user opens the app
@@ -24,14 +24,17 @@ Feature: Minesweeper
             | * * * * * * 1 |
             | 2 3 3 3 3 2 1 |
             | 0 0 0 0 0 0 0 |
-@prueba
-    Scenario: Default display screen
+    @done
+    Scenario: Default display screen, reseting the timer.
         Then in the timer screen should be shown a : "000"
-        And in the mines screen should be shown : "10"
-        And no square should be marked
-        And all buttons should be enabled
+    @done
+    Scenario: Default display screen, reseting the mines
 
-
+        Then in the mines screen should be shown a : "10"
+    @toBeDone
+    Scenario: Default display screen, reseting the boxes
+        And no boxes should be marked
+    @toBeDone
     Scenario: hitting emoji button
         When the user hits the <emoji_button>
         Then in the timer screen should be shown a 000
@@ -39,7 +42,7 @@ Feature: Minesweeper
         And no box should be marked
         And all buttons should be enabled
 
-
+    @wip
     Scenario: starting the counter
         When the user reveal the "g5" box
         Then the <timer_screen> start a count with the seconds passed

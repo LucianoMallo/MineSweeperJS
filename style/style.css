@@ -6,13 +6,11 @@ h2, h3{
     color: rgb(1, 0, 0);
 }
 
-#box {
+#Game {
     text-align: center;
-    
-   
 }
 
-#field table {
+#board table {
     border-collapse: collapse;
     font-size: 150%;
     font-family: san-serif;
@@ -21,7 +19,7 @@ h2, h3{
     
 }
 
-#field table td {
+#board table td {
     background-color: rgb(83, 83, 83);
     width: 30px;
     min-width: 30px;

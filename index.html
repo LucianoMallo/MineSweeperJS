@@ -7,23 +7,15 @@
     <script src="scripts/index.js"></script>
 </head>
 <body>
-    <div id="box">
+    <div id="Game">
         <h2>MINESWEEPER!</h2><hr><br><br>
 
-        <div id="Mines_Screen" style="display: none;" data-testid="Mines_Screen" value="10">10</div>
+        <div id="Timer_Screen" data-testid="Timer_Screen" value="000">000</div>
+        <div id="Mines_Screen" data-testid="Mines_Screen" value="10">10</div>
 
-        <div id="Timer_Screen" style="display: none;" data-testid="Timer_Screen" value="000">000</div>
-
-        <div id="Lost" style="display: none;">
-          <button id="new-game-button" type="button" onclick="reload()">Start Again</button>
-        </div>          
-           <div id="field" data-testid="field" value='[
-           ["*", "*", "*", "*", "*", "*", "*"],
-           ["*", "8", "*", "7", "6", "5", "4"],
-           ["*", "*", "*", "*", "*", "*", "1"],
-           ["2", "3", "3", "3", "3", "2", "1"],
-           ["0", "0", "0", "0", "0", "0", "0"],
-         ]';></div>         
+      <div id="board" value=></div>
+        </div>
+      </div>         
      </div>
 </body>
 </html>
