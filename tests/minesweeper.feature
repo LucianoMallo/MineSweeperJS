@@ -15,7 +15,7 @@ Feature: Minesweeper
     4| 2 3 3 3 3 2 1|
     5| 0 0 0 0 0 0 0|
     '
-
+  
     Background:
         Given a user opens the app
         Given the board is loaded with the value:
@@ -26,28 +26,27 @@ Feature: Minesweeper
             | 0 0 0 0 0 0 0 |
     @done
     Scenario: Default display screen, reseting the timer.
-        Then in the timer screen should be shown a : "000"
+        Then in the timer screen should be shown a : "00"
     @done
     Scenario: Default display screen, reseting the mines
 
-        Then in the mines screen should be shown a : "10"
+        Then in the mines screen should be shown a : "16"
     @toBeDone
     Scenario: Default display screen, reseting the boxes
         And no boxes should be marked
-    @toBeDone
+    @done
     Scenario: hitting emoji button
         When the user hits the <emoji_button>
-        Then in the timer screen should be shown a 000
-        And in the mines screen should be shown <number_of_mines>
-        And no box should be marked
-        And all buttons should be enabled
+        Then in the timer screen should be shown a : "00"
+        And in the mines screen should be shown a : "16"
+        And all cell should be unrevealed
 
-    @wip
+    @manual
     Scenario: starting the counter
         When the user reveal the "g5" box
         Then the <timer_screen> start a count with the seconds passed
 
-
+    @wip
     Scenario: Putting a flag on a box with suspected mine
         When the user puts a flag on : "a1"
         Then the box "a1" shows "F"

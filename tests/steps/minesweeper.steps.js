@@ -1,5 +1,5 @@
 const { Given, When, Then, DataTable } = require("@cucumber/cucumber");
-const { expect } = require("@playwright/test");
+const { expect, default: test } = require("@playwright/test");
 const { split } = require("lodash");
 
 const url = "http://127.0.0.1:5500/index.html";
@@ -25,8 +25,11 @@ Then("in the mines screen should be shown a : {string}", async (string) => {
   expect(Mines_Screen).toBe(string);
 });
 
-Then("no boxes should be marked", function () {
-  // Write code here that turns the phrase above into concrete actions
-  return "pending";
+Then("all cell should be unrevealed", async () =>{
+  const cell = await page.locator("id=cell-0-0");
+  await expect(cell).toHaveClass(/hidden/);
 });
 
+When('the user hits the <emoji_button>', async ()=> {
+  await page.locator("data-testid=Emoji").click();
+});

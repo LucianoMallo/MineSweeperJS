@@ -10,10 +10,11 @@
     <div id="Game">
         <h2>MINESWEEPER!</h2><hr><br><br>
 
-        <div id="Timer_Screen" data-testid="Timer_Screen" value="000">000</div>
-        <div id="Mines_Screen" data-testid="Mines_Screen" value="10">10</div>
+        <div id="Timer_Screen" class="Timer_Screen" data-testid="Timer_Screen"></div>
+        <div id="Emoji" class="Emoji" data-testid="Emoji" ><img onclick="restartGame()" src="/images/png-transparent-cocktail-fizzy-drinks-mojito-caipirinha-smiley-cool-miscellaneous-food-face.png"></div>
+        <div id="Mines_Screen" class="Mines_Screen" data-testid="Mines_Screen"></div>
 
-      <div id="board" value=></div>
+      <div id="board" onclick="startTimer()"></div>
         </div>
       </div>         
      </div>
