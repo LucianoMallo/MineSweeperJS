@@ -72,11 +72,11 @@ Feature: Minesweeper
     Scenario: Revealing a box with a mine
         When the user reveal the box "0-0"
         Then the box "0-0" should show a mine
-    @wip
+    @done
     Scenario: Losing the game
         When the user reveal the box "0-0"
         Then the display shows a game over message
-
+    @wip
     Scenario Outline: Revealing a box with a mine and reveal all mines
         When the user Reveal a <box>
         Then the <box> displays <display>

@@ -79,22 +79,23 @@ Then("the box {string} should shows a question mark", async (string) => {
   await expect(cell).toHaveClass(/question/);
 });
 
-When('the user reveal the box {string}', async (string) => {
+When("the user reveal the box {string}", async (string) => {
   await page.locator("id=cell-" + string + "").click();
-  
 });
 
-Then('the box {string} should show its content', async (string) => {
+Then("the box {string} should show its content", async (string) => {
   const cell = await page.locator("id=cell-" + string + "");
   await expect(cell).toHaveClass(/revealed/);
 });
 
-Then('the box {string} should show a mine', async (string) => {
+Then("the box {string} should show a mine", async (string) => {
   const cell = await page.locator("id=cell-" + string + "");
   await expect(cell).toHaveClass(/ * /);
 });
 
-Then('the display shows a game over message', async () => {
-  await page.on('dialog', dialog => dialog.accept());
-  await page.locator('button').click();
+Then("the display shows a game over message", async () => {
+    await page.on("dialog", async (dialog) => {
+      await expect(dialog.message()).toContain('Game Over Baby')
+      await page.click("#alert-button");
+  });
 });
