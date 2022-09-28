@@ -2,7 +2,8 @@ const { Given, When, Then, DataTable } = require("@cucumber/cucumber");
 const { expect, default: test } = require("@playwright/test");
 const { split } = require("lodash");
 
-const url = "http://127.0.0.1:5500/index.html";
+//const url = "http://127.0.0.1:5500/index.html"; //Local Tests
+const url = "https://lucianomallo.github.io/MineSweeperJS/" //Online Tests
 
 Given("a user opens the app", async () => {
   await page.goto(url);
