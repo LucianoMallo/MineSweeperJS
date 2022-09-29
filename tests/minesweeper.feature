@@ -6,7 +6,7 @@ Feature: Minesweeper
     Clear_box: "0"
     box with Flag: "flagged"
     question mark: "question"
-    Numbers: <sum_number_of_mines_around>
+    Numbers: <adjacent_mines>
     <board_to_test>:
        0 1 2 3 4 5 6
     ---------------
@@ -76,45 +76,33 @@ Feature: Minesweeper
     Scenario: Losing the game
         When the user reveal the box "0-0"
         Then the display shows a game over message
-    @wip
+    @done
     Scenario Outline: Revealing a box with a mine and reveal all mines
         When the user reveal the box "0-0"
         Then the <box> displays <display>
 
         Examples:
-            | box    | display |
-            | '0-0'  |    *    |
-            | '0-1'  |    *    |
-            | '0-2'  |    *    |
-            | '0-3'  |    *    |
-            | '0-4'  |    *    |
-            | '0-5'  |    *    |
-            | '0-6'  |    *    |
-            | '1-0'  |    *    |
-            | '2-1'  |    *    |
-            | '2-0'  |    *    |
-            | '2-1'  |    *    |
-            | '2-2'  |    *    |
-            | '2-3'  |    *    |
-            | '2-4'  |    *    |
-            | '2-5'  |    *    |
+            | box   | display |
+            | '0-0' | *       |
+            | '0-1' | *       |
+            | '0-2' | *       |
+            | '0-3' | *       |
+            | '0-4' | *       |
+            | '0-5' | *       |
+            | '0-6' | *       |
+            | '1-0' | *       |
+            | '2-1' | *       |
+            | '2-0' | *       |
+            | '2-1' | *       |
+            | '2-2' | *       |
+            | '2-3' | *       |
+            | '2-4' | *       |
+            | '2-5' | *       |
 
-
-    Scenario Outline: Reavealing a box without a mine, showing the number of the mines around
-        When the user reveal the <box>
-        And the <box> should show <sum_number_of_mines_around>
-
-            | box | sum_number_of_mines_around |
-            | b2  | 8                          |
-            | d2  | 7                          |
-            | e2  | 6                          |
-            | f2  | 5                          |
-            | g2  | 4                          |
-            | b4  | 3                          |
-            | f4  | 2                          |
-            | g3  | 1                          |
-            | g5  | 0                          |
-
+    @wip
+    Scenario Outline: Reavealing a box without a mine, showing the number of adjacent mines
+        When the user reveal the box '1-1'
+        Then the '1-1' should show the following value: "8"
 
     Scenario: Winning by putting a flag on all box with a mine
         Given the user put a flag on : "a1"
@@ -158,6 +146,14 @@ Feature: Minesweeper
         And the user reveal the "g5"
         Then the displays shows a winning message
 
+    Scenario Outline: Reavealing a cell with no adjacent mines
+        When the user reveal the "4-2" box
+        Then the "4-2" be reveal
+        And the "4-1" be reveal
+        And the "3-1" be reveal
+        And the "3-2" be reveal
+        And the "3-3" be reveal
+        And the "4-3" be reveal
 
     Scenario: Reavealing a cell with no mine around - Revealing surrounding cells (recursively)
         When the user reveal the "d8" box

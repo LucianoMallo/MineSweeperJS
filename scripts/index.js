@@ -6,7 +6,6 @@ const board = [
   ["-", "-", "-", "-", "-", "-", "-"],
 ];
 
-let hmtlBoard = null;
 const num_of_rows = board.length;
 const num_of_cols = board[0].length;
 let mines_counter = 16;
@@ -110,21 +109,22 @@ function revealingACell(cell) {
   ) {
     if (cell.classList.contains("hidden")) {
       cell.classList.replace("hidden", "revealed");
-      checkMines(cell);
+      checkForAMine(cell);
     }
   }
 }
 
-function checkMines(cell) {
+function checkForAMine(cell) {
   let exploded = false;
   if (cell.classList.contains("mine")) {
-    exploded = true;
-    document.getElementById(cell.id).innerText = "*";
+    exploded=true;
     revealingMines();
-  }
-  if (exploded) {
     gameOver();
   }
+  if(!exploded){
+    revealNumber(cell);
+  }
+    
 }
 
 function revealingMines() {
@@ -136,6 +136,7 @@ function revealingMines() {
       mine.classList.replace("hidden", "revealed");
       document.getElementById(mine.id).innerText = "*";
     }
+    
   });
 }
 
@@ -143,6 +144,16 @@ function gameOver(){
   clearInterval(initCancelTimer);
   window.alert("Game Over Baby");
 }
+
+
+function revealNumber(cell){
+let mines_ad;
+
+
+
+
+}
+
 
 function startTimer() {
   if (initCancelTimer == null) {
