@@ -8,7 +8,7 @@ Feature: Minesweeper
     question mark: "question"
     Numbers: <sum_number_of_mines_around>
     <board_to_test>:
-    0 1 2 3 4 5 6
+       0 1 2 3 4 5 6
     ---------------
     0| * * * * * * *|
     1| * 8 * 7 6 5 4|
@@ -78,26 +78,26 @@ Feature: Minesweeper
         Then the display shows a game over message
     @wip
     Scenario Outline: Revealing a box with a mine and reveal all mines
-        When the user Reveal a <box>
+        When the user reveal the box "0-0"
         Then the <box> displays <display>
 
         Examples:
-            | box | display |
-            | a1  | *       |
-            | b1  | *       |
-            | c1  | *       |
-            | d1  | *       |
-            | e1  | *       |
-            | f1  | *       |
-            | g1  | *       |
-            | a2  | *       |
-            | c2  | *       |
-            | a3  | *       |
-            | b3  | *       |
-            | c3  | *       |
-            | d3  | *       |
-            | e3  | *       |
-            | f3  | *       |
+            | box    | display |
+            | '0-0'  |    *    |
+            | '0-1'  |    *    |
+            | '0-2'  |    *    |
+            | '0-3'  |    *    |
+            | '0-4'  |    *    |
+            | '0-5'  |    *    |
+            | '0-6'  |    *    |
+            | '1-0'  |    *    |
+            | '2-1'  |    *    |
+            | '2-0'  |    *    |
+            | '2-1'  |    *    |
+            | '2-2'  |    *    |
+            | '2-3'  |    *    |
+            | '2-4'  |    *    |
+            | '2-5'  |    *    |
 
 
     Scenario Outline: Reavealing a box without a mine, showing the number of the mines around

@@ -2,8 +2,8 @@ const { Given, When, Then, DataTable } = require("@cucumber/cucumber");
 const { expect, default: test } = require("@playwright/test");
 const { split } = require("lodash");
 
-//const url = "http://127.0.0.1:5500/index.html"; //Local Tests
-const url = "https://lucianomallo.github.io/MineSweeperJS/" //Online Tests
+const url = "http://127.0.0.1:5500/index.html"; //Local Tests
+//const url = "https://lucianomallo.github.io/MineSweeperJS/" //Online Tests
 
 Given("a user opens the app", async () => {
   await page.goto(url);
@@ -91,7 +91,8 @@ Then("the box {string} should show its content", async (string) => {
 
 Then("the box {string} should show a mine", async (string) => {
   const cell = await page.locator("id=cell-" + string + "");
-  await expect(cell).toHaveClass(/ * /);
+  await expect(cell).toContainText('*');
+  //await expect(cell).toHaveClass(/mine/);
 });
 
 Then("the display shows a game over message", async () => {
@@ -99,4 +100,9 @@ Then("the display shows a game over message", async () => {
       await expect(dialog.message()).toContain('Game Over Baby')
       await page.click("#alert-button");
   });
+});
+
+Then('the {string} displays *', async (string)=> {
+  const cell = await page.locator("id=cell-" + string + "");
+  await expect(cell).toContainText('*');
 });

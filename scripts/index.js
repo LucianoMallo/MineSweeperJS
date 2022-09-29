@@ -1,7 +1,7 @@
 const board = [
-  ["*", "*", "*", "*", "*", "*", "*"],
-  ["*", "-", "*", "-", "-", "-", "-"],
-  ["*", "*", "*", "*", "*", "*", "-"],
+  ["mine", "mine", "mine", "mine", "mine", "mine", "mine"],
+  ["mine", "-", "mine", "-", "-", "-", "-"],
+  ["mine", "mine", "mine", "mine", "mine", "mine", "-"],
   ["-", "-", "-", "-", "-", "-", "-"],
   ["-", "-", "-", "-", "-", "-", "-"],
 ];
@@ -9,17 +9,19 @@ const board = [
 let hmtlBoard = null;
 const num_of_rows = board.length;
 const num_of_cols = board[0].length;
-let mines = 16;
+let mines_counter = 16;
 let timer = null;
 let initCancelTimer;
 let field;
+let mine_emoji = "&#x2600;";
+const mines = [];
 
 // Manage of the event listeners with right click
 window.addEventListener("contextmenu", (e) => e.preventDefault());
 window.addEventListener("contextmenu", (e) => putInterrogantOrFlag(e.target));
 
 window.onload = function () {
-  document.getElementById("Mines_Screen").innerText = mines;
+  document.getElementById("Mines_Screen").innerText = mines_counter;
   document.getElementById("Timer_Screen").innerText = "00";
   field = document.getElementById("board");
   startGame();
@@ -53,6 +55,9 @@ function fillBoard() {
   for (i = 0; i < num_of_rows; i++) {
     for (j = 0; j < num_of_cols; j++) {
       cell = document.getElementById(cellID(i, j));
+      if (board[i][j] == "mine") {
+        mines.push(cell);
+      }
       cell.classList.add(board[i][j]);
       cleanCell(cell);
       //cell.innerText = board[i][j]; //Can be uncommented to see the board.
@@ -79,16 +84,18 @@ function putInterrogantOrFlag(cell) {
   ) {
     if (cell.classList.contains("question")) {
       cell.classList.remove("question");
-      mines += 1;
-      document.getElementById("Mines_Screen").innerText = mines;
+      mines_counter += 1;
+      document.getElementById("Mines_Screen").innerText = mines_counter;
     }
     if (cell.classList.contains("flagged")) {
       cell.classList.replace("flagged", "question");
+      document.getElementById(cell.id).innerText = "?";
     }
   } else if (cell.classList.contains("hidden")) {
     cell.classList.add("flagged");
-    mines -= 1;
-    document.getElementById("Mines_Screen").innerText = mines;
+    document.getElementById(cell.id).innerText = "F";
+    mines_counter -= 1;
+    document.getElementById("Mines_Screen").innerText = mines_counter;
   }
 }
 
@@ -109,10 +116,32 @@ function revealingACell(cell) {
 }
 
 function checkMines(cell) {
-  if (cell.classList.contains("*")) {
-    clearInterval(initCancelTimer);
-    window.alert("Game Over Baby");
+  let exploded = false;
+  if (cell.classList.contains("mine")) {
+    exploded = true;
+    document.getElementById(cell.id).innerText = "*";
+    revealingMines();
   }
+  if (exploded) {
+    gameOver();
+  }
+}
+
+function revealingMines() {
+  mines.forEach((mine) => {
+    if (
+      !mine.classList.contains("flagged") &&
+      !mine.classList.contains("question")
+    ) {
+      mine.classList.replace("hidden", "revealed");
+      document.getElementById(mine.id).innerText = "*";
+    }
+  });
+}
+
+function gameOver(){
+  clearInterval(initCancelTimer);
+  window.alert("Game Over Baby");
 }
 
 function startTimer() {
@@ -130,6 +159,7 @@ function cleanCell(cell) {
   cell.classList.remove("question");
   cell.classList.remove("flagged");
   cell.classList.remove("revealed");
+  document.getElementById(cell.id).innerText = "";
   cell.classList.add("hidden");
 }
 
