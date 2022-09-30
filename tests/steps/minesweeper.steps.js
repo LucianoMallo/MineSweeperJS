@@ -68,6 +68,8 @@ When("the user removes a question mark on : {string}", async (string) => {
 Then("the box {string} should not show nothing", async (string) => {
   const cell = await page.locator("id=cell-" + string + "");
   await expect(cell).not.toHaveClass(/question/);
+  await expect(cell).not.toContainText('?');
+
 });
 
 When("the user removes a flag on : {string}", async (string) => {
@@ -107,6 +109,6 @@ Then('the {string} displays *', async (string)=> {
 });
 
 Then('the {string} should show the following value: {string}', async (string, string2)=> {
-  const cell = await page.locator("id=cell-" + string + "");
-  await expect(cell).toContainText(string2);
+  const cell = await page.locator("id=cell-" + string + "").innerText();
+  await expect(cell).toBe(string2);
 });

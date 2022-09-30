@@ -11,10 +11,11 @@ Feature: Minesweeper
        0 1 2 3 4 5 6
     ---------------
     0| * * * * * * *|
-    1| * 8 * 7 6 5 4|
+    1| * 8 * 7 6 5 3|
     2| * * * * * * 1|
-    3| 2 3 3 3 3 2 1|
-    4| 0 0 0 0 0 0 0|
+    3| 2 4 * 4 3 2 1|
+    4| 0 1 1 1 0 0 0|
+    5| 0 0 0 0 0 0 0|
     '
 
     Background:
@@ -99,27 +100,40 @@ Feature: Minesweeper
             | '2-4' | *       |
             | '2-5' | *       |
 
-    @wip
+    @done
     Scenario Outline: Reavealing a box without a mine, showing the number of adjacent mines
-        When the user reveal the box '1-1'
-        Then the '1-1' should show the following value: "8"
+        When the user reveal the box <box>
+        Then the <box> should show the following value: <adjacent_mines>
+        
+        Examples:
+            |  box  | adjacent_mines   |
+            | '1-1' | '8'              |
+            | '1-3' | '7'              |
+            | '1-4' | '6'              |
+            | '1-5' | '5'              |
+            | '3-1' | '4'              |
+            | '1-6' | '3'              |
+            | '3-0' | '2'              |
+            | '3-6' | '1'              |
+            | '4-0' | '0'              |
 
+    @wip
     Scenario: Winning by putting a flag on all box with a mine
-        Given the user put a flag on : "a1"
-        And the user put a flag on : "b1"
-        And the user put a flag on : "c1"
-        And the user put a flag on : "d1"
-        And the user put a flag on : "e1"
-        And the user put a flag on : "f1"
-        And the user put a flag on : "g1"
-        And the user put a flag on : "a2"
-        And the user put a flag on : "c2"
-        And the user put a flag on : "a3"
-        And the user put a flag on : "b3"
-        And the user put a flag on : "c3"
-        And the user put a flag on : "d3"
-        And the user put a flag on : "e3"
-        And the user put a flag on : "f3"
+        Given the user put a flag on : "0-0"
+        And the user put a flag on : "0-1"
+        And the user put a flag on : "0-2"
+        And the user put a flag on : "0-3"
+        And the user put a flag on : "0-4"
+        And the user put a flag on : "0-5"
+        And the user put a flag on : "0-6"
+        And the user put a flag on : "1-0"
+        And the user put a flag on : "1-2"
+        And the user put a flag on : "2-1"
+        And the user put a flag on : "2-2"
+        And the user put a flag on : "2-3"
+        And the user put a flag on : "2-4"
+        And the user put a flag on : "2-5"
+        And the user put a flag on : "3-2"
         Then the displays shows a winning message
         And the number on the <mines_screen> should show value: "0"
 

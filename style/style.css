@@ -9,6 +9,7 @@ h3 {
 
 #Game {
   text-align: center;
+  background-color: rgb(35, 164, 65);
 }
 
 #board table {
@@ -40,20 +41,30 @@ button {
   box-shadow: inset 3px 3px 0 0 rgba(255, 255, 255, 0.5),
     inset -3px -3px 0 0 rgba(0, 0, 0, 0.5);
 }
+#TimeScore{
+
+  margin-left: 473px;
+  margin-right: 471px;
+  background-color: #D9D9D9;
+  border: 1px solid black;
+  box-shadow: inset -3px -3px 0 0 #FFFFFF,
+    inset 3px 3px 0 0 rgba(0, 0, 0, 0.5);
+}
 
 div.Timer_Screen {
+  height: 24px;
   display: inline-block;
   font-family: "Cursed Timer ULiL";
   margin: 10px;
   border: 1px inset #eeeeee;
   padding-right: 3px;
-  width: 1.75em;
+  width: 1.60em;
   background-color: #000000;
   color: #ff6666;
   font-size: 24px;
   font-weight: bold;
   line-height: 1;
-  text-align: right;
+  text-align: center;
 }
 div.Emoji {
   display: inline-block;
@@ -72,18 +83,19 @@ div img {
   text-align: right;
 }
 div.Mines_Screen {
+  height: 25px;
   display: inline-block;
   font-family: "Cursed Timer ULiL";
   margin: 10px;
   border: 1px inset #eeeeee;
   padding-right: 3px;
-  width: 1.75em;
+  width: 1.60em;
   background-color: #000000;
   color: #ff6666;
   font-size: 24px;
   font-weight: bold;
   line-height: 1;
-  text-align: right;
+  text-align: center;
 }
 
 td.mine {
@@ -98,4 +110,14 @@ td.mine {
   box-shadow: inset -3px -3px 0 0 rgba(255, 254, 254, 0.5),
     inset 3px 3px 0 0 rgba(0, 0, 0, 0.5);
   
+}
+td.number{
+  background-color: rgb(128, 127, 127);
+  width: 55px;
+  min-width: 30px;
+  height: 55px;
+  min-height: 40px;
+  border: 1px solid black;
+  box-shadow: inset -3px -3px 0 0 rgba(255, 254, 254, 0.5),
+  inset 3px 3px 0 0 rgba(0, 0, 0, 0.5);
 }
