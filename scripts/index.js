@@ -9,12 +9,14 @@ const board = [
 
 const num_of_rows = board.length;
 const num_of_cols = board[0].length;
-let mines_counter = 17;
+let mines_counter = 16;
 let timer = null;
 let initCancelTimer;
 let field;
 let mine_emoji = "&#x2600;";
 const mines = [];
+let exploded = false;
+let win = false;
 
 // Manage of the event listeners with right click
 window.addEventListener("contextmenu", (e) => e.preventDefault());
@@ -40,7 +42,6 @@ function createTable() {
     row = document.createElement("tr");
     for (j = 0; j < num_of_cols; j++) {
       td = document.createElement("td");
-
       td.id = cellID(i, j);
       td.at = board[(i, j)];
       row.appendChild(td);
@@ -70,12 +71,13 @@ function cellID(i, j) {
 }
 
 function restartGame() {
-  document.getElementById("Mines_Screen").innerText = "17";
+  document.getElementById("Mines_Screen").innerText = "16";
   document.getElementById("Timer_Screen").innerText = "00";
   mines_counter = 16;
   clearInterval(initCancelTimer);
   initCancelTimer = null;
   fillBoard();
+  win=false;
 }
 
 function putInterrogantOrFlag(cell) {
@@ -98,6 +100,7 @@ function putInterrogantOrFlag(cell) {
     document.getElementById(cell.id).innerText = "F";
     mines_counter -= 1;
     document.getElementById("Mines_Screen").innerText = mines_counter;
+    checkForWiningWithFlags();
   }
 }
 
@@ -108,17 +111,19 @@ function game() {
 function revealingACell(cell) {
   if (
     !cell.classList.contains("flagged") &&
-    !cell.classList.contains("question")
+    !cell.classList.contains("question") &&
+    !exploded &&
+    !win
   ) {
     if (cell.classList.contains("hidden")) {
       cell.classList.replace("hidden", "revealed");
       checkForAMine(cell);
+      checkForWiningRevealingAllCells();
     }
   }
 }
 
 function checkForAMine(cell) {
-  let exploded = false;
   if (cell.classList.contains("mine")) {
     exploded = true;
     revealingMines();
@@ -141,43 +146,94 @@ function revealingMines() {
   });
 }
 
+function checkForWiningWithFlags() {
+  mines.forEach((mine) => {
+    if (mine.classList.contains("flagged")) {
+      win = true;
+    } else {
+      win = false;
+    }
+  });
+  if (win) {
+    winning();
+  }
+}
+function checkForWiningRevealingAllCells() {
+  for (i = 0; i < num_of_rows; i++) {
+    for (j = 0; j < num_of_cols; j++) {
+      cell = document.getElementById(cellID(i, j));
+      if (cell.classList.contains("mine")) {
+        win = false;
+      }
+      if (cell.classList.contains("number")&&cell.classList.contains("hidden")) {
+        win = false;
+      } else {
+        win = true;
+      }
+    }
+  }
+
+  if(win){
+    winning();
+  }
+}
+
 function gameOver() {
   clearInterval(initCancelTimer);
+  initCancelTimer = null;
   window.alert("Game Over Baby");
+}
+function winning() {
+  clearInterval(initCancelTimer);
+  initCancelTimer = null;
+  window.alert("Okey you are a crack you win this");
 }
 
 function getNumberOfCell(cell) {
-
-idString = cell.id.split("-");
-let x = parseInt(idString[1]);
-let y = parseInt(idString[2]);
-let mines_ad = 0;
-if(haveBomb(x-1,y)){mines_ad++;} //middle left 
-if(haveBomb(x-1,y-1)){mines_ad++;} //upper left
-if(haveBomb(x,y-1)){mines_ad++;} //upper center
-if(haveBomb(x+1,y-1)){mines_ad++;} //upper right
-if(haveBomb(x+1,y)){mines_ad++;} //middle right
-if(haveBomb(x+1,y+1)){mines_ad++;} //down right
-if(haveBomb(x,y+1)){mines_ad++;} //down center
-if(haveBomb(x-1,y+1)){mines_ad++;} //down left
-document.getElementById(cell.id).innerHTML= String(mines_ad)
+  idString = cell.id.split("-");
+  let x = parseInt(idString[1]);
+  let y = parseInt(idString[2]);
+  let mines_ad = 0;
+  if (haveBomb(x - 1, y)) {
+    mines_ad++;
+  } //middle left
+  if (haveBomb(x - 1, y - 1)) {
+    mines_ad++;
+  } //upper left
+  if (haveBomb(x, y - 1)) {
+    mines_ad++;
+  } //upper center
+  if (haveBomb(x + 1, y - 1)) {
+    mines_ad++;
+  } //upper right
+  if (haveBomb(x + 1, y)) {
+    mines_ad++;
+  } //middle right
+  if (haveBomb(x + 1, y + 1)) {
+    mines_ad++;
+  } //down right
+  if (haveBomb(x, y + 1)) {
+    mines_ad++;
+  } //down center
+  if (haveBomb(x - 1, y + 1)) {
+    mines_ad++;
+  } //down left
+  document.getElementById(cell.id).innerHTML = String(mines_ad);
 }
 
+function haveBomb(x, y) {
+  if (x < 0 || x >= num_of_rows) {
+    return false;
+  }
 
-function haveBomb(x,y){
-
-if (x < 0 || x >= num_of_rows) {
-  return false;
-}
-
-if(y < 0 || y >= num_of_cols){return false}
-if(board[x][y]=='mine'){
-return true;
-}
-
-else {
-  return false
-}
+  if (y < 0 || y >= num_of_cols) {
+    return false;
+  }
+  if (board[x][y] == "mine") {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 function startTimer() {
@@ -197,6 +253,7 @@ function cleanCell(cell) {
   cell.classList.remove("revealed");
   document.getElementById(cell.id).innerText = "";
   cell.classList.add("hidden");
+  exploded = false;
 }
 
 /*const board = [

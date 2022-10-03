@@ -112,3 +112,10 @@ Then('the {string} should show the following value: {string}', async (string, st
   const cell = await page.locator("id=cell-" + string + "").innerText();
   await expect(cell).toBe(string2);
 });
+
+Then('the displays shows a winning message', async () => {
+  await page.on("dialog", async (dialog) => {
+    await expect(dialog.message()).toContain('Okey you are a crack you win this')
+    await page.click("#alert-button");
+});
+});
