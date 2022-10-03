@@ -77,7 +77,7 @@ function restartGame() {
   clearInterval(initCancelTimer);
   initCancelTimer = null;
   fillBoard();
-  win=false;
+  win = false;
 }
 
 function putInterrogantOrFlag(cell) {
@@ -119,6 +119,12 @@ function revealingACell(cell) {
       cell.classList.replace("hidden", "revealed");
       checkForAMine(cell);
       checkForWiningRevealingAllCells();
+      if (cell.innerText == "0") {
+        idString = cell.id.split("-");
+        let x = parseInt(idString[1]);
+        let y = parseInt(idString[2]);
+        openCellWithNoAdjacentMines(x, y);
+      }
     }
   }
 }
@@ -165,7 +171,10 @@ function checkForWiningRevealingAllCells() {
       if (cell.classList.contains("mine")) {
         win = false;
       }
-      if (cell.classList.contains("number")&&cell.classList.contains("hidden")) {
+      if (
+        cell.classList.contains("number") &&
+        cell.classList.contains("hidden")
+      ) {
         win = false;
       } else {
         win = true;
@@ -173,7 +182,7 @@ function checkForWiningRevealingAllCells() {
     }
   }
 
-  if(win){
+  if (win) {
     winning();
   }
 }
@@ -219,6 +228,7 @@ function getNumberOfCell(cell) {
     mines_ad++;
   } //down left
   document.getElementById(cell.id).innerHTML = String(mines_ad);
+  return mines_ad;
 }
 
 function haveBomb(x, y) {
@@ -233,6 +243,20 @@ function haveBomb(x, y) {
     return true;
   } else {
     return false;
+  }
+}
+
+function openCellWithNoAdjacentMines(x, y) {
+ 
+  for (i = x; i-1 < num_of_cols - 1; i++) {
+    for (j = y; j-1 < num_of_rows - 1; j++) {
+      if (i < 0 || i > num_of_rows) {
+        break;
+      }
+      if (j < 0 || j > num_of_cols) {
+        break;
+      }
+    }
   }
 }
 
