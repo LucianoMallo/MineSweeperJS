@@ -64,7 +64,7 @@ function fillBoard() {
         cell.classList.add("number");
         board[i][j] = "number";
       }
-      cell.innerText = cell.classList; //Can be uncommented to see the board.
+      //cell.innerText = cell.classList; //Can be uncommented to see the board.
     }
   }
 }
