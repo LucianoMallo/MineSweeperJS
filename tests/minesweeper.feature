@@ -138,7 +138,7 @@ Feature: Minesweeper
         Then the displays shows a winning message
         And in the mines screen should be shown a : "0"
 
-    @done
+    @wip
     Scenario Outline: Winning by reavealing all boxes without a mine
         When the user reveal the box "1-1"
         And the user reveal the box "1-3"
@@ -170,29 +170,36 @@ Feature: Minesweeper
 
         Then the displays shows a winning message
 
-    @wip
+    @done
     Scenario Outline: Reavealing a cell with no adjacent mines
-        When the user reveal the "4-2" box
-        Then the "4-2" be reveal
-        And the "4-1" be reveal
-        And the "3-1" be reveal
-        And the "3-2" be reveal
-        And the "3-3" be reveal
-        And the "4-3" be reveal
-
+        When the user reveal the box "4-0"
+        Then the box "4-0" should show its content
+        And the box "4-1" should show its content
+        And the box "3-0" should show its content
+        And the box "3-1" should show its content
+        And the box "5-0" should show its content
+        And the box "5-1" should show its content
+      
+    @done
     Scenario: Reavealing a cell with no mine around - Revealing surrounding cells (recursively)
-        When the user reveal the "d8" box
-        Then the box "g5" opens
-        And the box "f5" opens
-        And the box "e5" opens
-        And the box "d5" opens
-        And the box "c5" opens
-        And the box "b5" opens
-        And the box "a5" opens
-        And the box "g4" opens
-        And the box "f4" opens
-        And the box "e4" opens
-        And the box "d4" opens
-        And the box "c4" opens
-        And the box "b4" opens
-        And the box "a4" opens
+        When the user reveal the box "4-0"
+       Then the box "4-0" should show its content
+        And the box "4-1" should show its content
+        And the box "4-2" should show its content
+        And the box "4-3" should show its content
+        And the box "4-4" should show its content
+        And the box "4-5" should show its content
+        And the box "4-6" should show its content
+        And the box "3-0" should show its content
+        And the box "3-1" should show its content
+        And the box "3-3" should show its content
+        And the box "3-4" should show its content
+        And the box "3-5" should show its content
+        And the box "3-6" should show its content
+        And the box "5-0" should show its content
+        And the box "5-1" should show its content
+        And the box "5-2" should show its content
+        And the box "5-3" should show its content
+        And the box "5-4" should show its content
+        And the box "5-5" should show its content
+        And the box "5-6" should show its content

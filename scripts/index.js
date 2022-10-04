@@ -6,7 +6,6 @@ const board = [
   ["number", "number", "number", "number", "number", "number", "number"],
   ["number", "number", "number", "number", "number", "number", "number"],
 ];
-
 const num_of_rows = board.length;
 const num_of_cols = board[0].length;
 let mines_counter = 16;
@@ -17,6 +16,7 @@ let mine_emoji = "&#x2600;";
 const mines = [];
 let exploded = false;
 let win = false;
+const cellsWithoutMines = [];
 
 // Manage of the event listeners with right click
 window.addEventListener("contextmenu", (e) => e.preventDefault());
@@ -32,6 +32,7 @@ window.onload = function () {
 function startGame() {
   document.getElementById("board").appendChild(createTable());
   fillBoard();
+  //randomCell(); To implement Random must be define
   game();
 }
 
@@ -44,6 +45,7 @@ function createTable() {
       td = document.createElement("td");
       td.id = cellID(i, j);
       td.at = board[(i, j)];
+      td.classList.add('hidden')
       row.appendChild(td);
     }
     table.appendChild(row);
@@ -52,12 +54,15 @@ function createTable() {
 }
 
 function fillBoard() {
-  let cell, td;
+  let cell;
   for (i = 0; i < num_of_rows; i++) {
     for (j = 0; j < num_of_cols; j++) {
       cell = document.getElementById(cellID(i, j));
       if (board[i][j] == "mine") {
         mines.push(cell);
+      }
+      if (board[i][j] == "number") {
+        cellsWithoutMines.push(cell);
       }
       cell.classList.add(board[i][j]);
       cleanCell(cell);
@@ -116,14 +121,15 @@ function revealingACell(cell) {
     !win
   ) {
     if (cell.classList.contains("hidden")) {
+      checkForWiningRevealingAllCells();
       cell.classList.replace("hidden", "revealed");
       checkForAMine(cell);
-      checkForWiningRevealingAllCells();
+
       if (cell.innerText == "0") {
         idString = cell.id.split("-");
         let x = parseInt(idString[1]);
         let y = parseInt(idString[2]);
-        openCellWithNoAdjacentMines(x, y);
+        revealAdjacent(x, y);
       }
     }
   }
@@ -168,20 +174,17 @@ function checkForWiningRevealingAllCells() {
   for (i = 0; i < num_of_rows; i++) {
     for (j = 0; j < num_of_cols; j++) {
       cell = document.getElementById(cellID(i, j));
-      if (cell.classList.contains("mine")) {
-        win = false;
-      }
       if (
         cell.classList.contains("number") &&
         cell.classList.contains("hidden")
       ) {
         win = false;
+        break;
       } else {
         win = true;
       }
     }
   }
-
   if (win) {
     winning();
   }
@@ -246,16 +249,19 @@ function haveBomb(x, y) {
   }
 }
 
-function openCellWithNoAdjacentMines(x, y) {
- 
-  for (i = x; i-1 < num_of_cols - 1; i++) {
-    for (j = y; j-1 < num_of_rows - 1; j++) {
-      if (i < 0 || i > num_of_rows) {
-        break;
+function revealAdjacent(x, y) {
+  for (let i = x - 1; i <= x + 1; i++) {
+    for (let j = y - 1; j <= y + 1; j++) {
+      console.log("i: " + i + " J:" + j);
+      if (i < 0 || j < 0 || i >= board.length || j >= board[1].length) continue;
+
+      let cell = document.getElementById(cellID(i, j));
+
+      if (cell.classList.contains("revealed")) {
+        continue;
       }
-      if (j < 0 || j > num_of_cols) {
-        break;
-      }
+
+      revealingACell(cell);
     }
   }
 }
@@ -280,10 +286,17 @@ function cleanCell(cell) {
   exploded = false;
 }
 
-/*const board = [
-  ["*", "*", "*", "*", "*", "*", "*"],
-  ["*", "8", "*", "7", "6", "5", "4"],
-  ["*", "*", "*", "*", "*", "*", "1"],
-  ["2", "3", "3", "3", "3", "2", "1"],
-  ["0", "0", "0", "0", "0", "0", "0"],
-];*/
+function randomCell() {
+  let mineLayed = 0;
+  while (mineLayed != mines_counter) {
+    let cellRow = Math.floor(Math.random() * num_of_rows);
+    let cellCol = Math.floor(Math.random() * num_of_cols);
+    cell = document.getElementById(cellID(cellRow, cellCol));
+    console.log(cell);
+    if (!mines.includes(cell)) {
+      cell.classList.add("mine");
+      mineLayed++;
+    }
+  }
+}
+
