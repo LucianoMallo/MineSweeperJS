@@ -125,7 +125,6 @@ function revealingACell(cell) {
       cell.classList.replace("hidden", "revealed");
       checkForAMine(cell);
       checkForWiningRevealingAllCells();
-      console.log(cell.classList);
       if (win) {
         winning();
       } else {
@@ -298,7 +297,6 @@ function randomCell() {
     let cellCol = Math.floor(Math.random() * num_of_cols);
     cell = document.getElementById(cellID(cellRow, cellCol));
     if (!mines.includes(cell)) {
-      console.log(cell);
       cell.classList.add("mine");
       mines.push(cell);
       board[cellRow][cellCol] = "mine";
