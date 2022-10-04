@@ -32,7 +32,7 @@ window.onload = function () {
 function startGame() {
   document.getElementById("board").appendChild(createTable());
   fillBoard();
-  //randomCell(); To implement Random must be define
+  //randomCell(); //To implement Random must be define
   game();
 }
 
@@ -45,7 +45,7 @@ function createTable() {
       td = document.createElement("td");
       td.id = cellID(i, j);
       td.at = board[(i, j)];
-      td.classList.add('hidden')
+      td.classList.add("hidden");
       row.appendChild(td);
     }
     table.appendChild(row);
@@ -121,15 +121,19 @@ function revealingACell(cell) {
     !win
   ) {
     if (cell.classList.contains("hidden")) {
-      checkForWiningRevealingAllCells();
       cell.classList.replace("hidden", "revealed");
       checkForAMine(cell);
-
-      if (cell.innerText == "0") {
-        idString = cell.id.split("-");
-        let x = parseInt(idString[1]);
-        let y = parseInt(idString[2]);
-        revealAdjacent(x, y);
+      checkForWiningRevealingAllCells();
+      console.log(cell.classList)
+      if (win) {
+        winning();
+      } else {
+        if (cell.innerText == "0") {
+          idString = cell.id.split("-");
+          let x = parseInt(idString[1]);
+          let y = parseInt(idString[2]);
+          revealAdjacent(x, y);
+        }
       }
     }
   }
@@ -179,14 +183,11 @@ function checkForWiningRevealingAllCells() {
         cell.classList.contains("hidden")
       ) {
         win = false;
-        break;
+        return;
       } else {
         win = true;
       }
     }
-  }
-  if (win) {
-    winning();
   }
 }
 
@@ -195,10 +196,13 @@ function gameOver() {
   initCancelTimer = null;
   window.alert("Game Over Baby");
 }
-function winning() {
+ function winning() {
   clearInterval(initCancelTimer);
   initCancelTimer = null;
-  window.alert("Okey you are a crack you win this");
+  setTimeout(function() {
+  	window.alert("Okey you are a crack you win this");
+  },10)
+  
 }
 
 function getNumberOfCell(cell) {
@@ -252,7 +256,6 @@ function haveBomb(x, y) {
 function revealAdjacent(x, y) {
   for (let i = x - 1; i <= x + 1; i++) {
     for (let j = y - 1; j <= y + 1; j++) {
-      console.log("i: " + i + " J:" + j);
       if (i < 0 || j < 0 || i >= board.length || j >= board[1].length) continue;
 
       let cell = document.getElementById(cellID(i, j));
@@ -299,4 +302,3 @@ function randomCell() {
     }
   }
 }
-
