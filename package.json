@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "test": "cucumber-js --require cucumber.config.js --require tests/steps/**/*.steps.js --format @cucumber/pretty-formatter --format html:tests/reports/cucumber-report.html --tags \"@wip\" --parallel 4"
+    "test": "cucumber-js --require cucumber.config.js --require tests/steps/**/*.steps.js --format @cucumber/pretty-formatter --format html:tests/reports/cucumber-report.html --tags \"@done\" --parallel 4"
   },
   "dependencies": {
     "yarn": "^1.22.19"

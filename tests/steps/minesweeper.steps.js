@@ -46,7 +46,7 @@ When("the user puts a flag on : {string}", async (string) => {
 
 Then("the box {string} shows a flag", async (string) => {
   const cell = await page.locator("id=cell-" + string + "");
-  await expect(cell).toHaveClass(/flagged/);
+  await expect(cell).toContainText('F');
 });
 
 When("the user puts a question mark on : {string}", async (string) => {
@@ -54,9 +54,9 @@ When("the user puts a question mark on : {string}", async (string) => {
   await page.locator("id=cell-" + string).click({ button: "right" });
 });
 
-Then("the box {string} shows a question mark", async (string) => {
+Then("the box {string} should shows a question mark", async (string) => {
   const cell = await page.locator("id=cell-" + string + "");
-  await expect(cell).toHaveClass(/question/);
+  await expect(cell).toContainText('?');
 });
 
 When("the user removes a question mark on : {string}", async (string) => {
@@ -67,9 +67,7 @@ When("the user removes a question mark on : {string}", async (string) => {
 
 Then("the box {string} should not show nothing", async (string) => {
   const cell = await page.locator("id=cell-" + string + "");
-  await expect(cell).not.toHaveClass(/question/);
-  await expect(cell).not.toContainText('?');
-
+  await expect(cell).toContainText("");
 });
 
 When("the user removes a flag on : {string}", async (string) => {
@@ -77,45 +75,42 @@ When("the user removes a flag on : {string}", async (string) => {
   await page.locator("id=cell-" + string).click({ button: "right" });
 });
 
-Then("the box {string} should shows a question mark", async (string) => {
-  const cell = await page.locator("id=cell-" + string + "");
-  await expect(cell).toHaveClass(/question/);
-});
 
-When('the user reveal the box {string}', async (string)=> {
+
+When("the user reveal the box {string}", async (string) => {
   await page.locator("id=cell-" + string + "").click();
 });
 
-Then("the box {string} should show its content", async (string) => {
-  const cell = await page.locator("id=cell-" + string + "");
-  await expect(cell).toHaveClass(/revealed/);
-});
-
-Then("the box {string} should show a mine", async (string) => {
-  const cell = await page.locator("id=cell-" + string + "");
-  await expect(cell).toContainText('*');
-});
-
-Then("the display shows a game over message", async () => {
-    await page.on("dialog", async (dialog) => {
-      await expect(dialog.message()).toContain('Game Over Baby')
-      await page.click("#alert-button");
-  });
-});
-
-Then('the {string} displays *', async (string)=> {
-  const cell = await page.locator("id=cell-" + string + "");
-  await expect(cell).toContainText('*');
-});
-
-Then('the {string} should show the following value: {string}', async (string, string2)=> {
+Then("the box {string} should show :{string}", async (string,string2) => {
   const cell = await page.locator("id=cell-" + string + "").innerText();
   await expect(cell).toBe(string2);
 });
 
-Then('the displays shows a winning message', async () => {
-  await page.on("dialog", async (dialog) => {
-    await expect(dialog.message()).toContain('Okey you are a crack you win this')
-    await page.click("#alert-button");
+Then("the box {string} should show a mine", async (string) => {
+  const cell = await page.locator("id=cell-" + string + "");
+  await expect(cell).toContainText("☀");
 });
+
+Then("the display shows a game over message", async () => {
+  await page.on("dialog", async (dialog) => {
+    await expect(dialog.message()).toContain("Game Over Baby");
+    await page.click("#alert-button");
+  });
+});
+
+Then(
+  "the {string} should show the following value: {string}",
+  async (string, string2) => {
+    const cell = await page.locator("id=cell-" + string + "").innerText();
+    await expect(cell).toBe(string2);
+  }
+);
+
+Then("the displays shows a winning message", async () => {
+  await page.on("dialog", async (dialog) => {
+    await expect(dialog.message()).toContain(
+      "Okey you are a crack you win this"
+    );
+    await page.click("#alert-button");
+  });
 });

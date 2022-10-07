@@ -4,20 +4,31 @@
     <meta charset="UTF-8" />
     <link type="text/css" rel="stylesheet" href="style/style.css" />
     <title>Minesweeper</title>
-    <script src="scripts/indexRandom.js"></script>
+    <script src="scripts/testBoard.js" defer></script>
+    <script src="scripts/createTableScript.js" defer></script>
+    <script src="scripts/index.js" defer></script>
+    <script src="scripts/EventsListeners.js" defer></script>
+    
   </head>
   <body>
     <div id="Game">
       <h2>MINESWEEPER!</h2>
       <div id="TimeScore">
-        <div id="Timer_Screen" class="Timer_Screen" data-testid="Timer_Screen"></div>
-          <div id="Emoji" class="Emoji" data-testid="Emoji">
-            <img onclick="restartGame()" src="images/emoji.png" />
-          </div>
-        <div id="Mines_Screen" class="Mines_Screen" data-testid="Mines_Screen"
+        <div
+          id="Timer_Screen"
+          class="Timer_Screen"
+          data-testid="Timer_Screen"
+        ></div>
+        <div id="Emoji" class="Emoji" data-testid="Emoji">
+          <img onclick="restartGame()" src="images/emoji.png" />
+        </div>
+        <div
+          id="Mines_Screen"
+          class="Mines_Screen"
+          data-testid="Mines_Screen"
         ></div>
       </div>
-      <div id="board" onclick="startTimer()"></div>
+      <div id="board" ></div>
     </div>
   </body>
 </html>

@@ -17,7 +17,7 @@ Feature: Minesweeper
     4| 0 1 1 1 0 0 0|
     5| 0 0 0 0 0 0 0|
     '
-
+    
     Background:
         Given a user opens the app
 
@@ -51,7 +51,7 @@ Feature: Minesweeper
     @done
     Scenario: Putting a question mark on a box
         When the user puts a question mark on : "0-0"
-        Then the box "0-0" shows a question mark
+        Then the box "0-0" should shows a question mark
         And in the mines screen should be shown a : "15"
 
     @done
@@ -62,13 +62,13 @@ Feature: Minesweeper
     @done
     Scenario: Removing a flag on a box, by putting a question mark instead
         When the user removes a flag on : "0-0"
-        Then the box "0-0" should show a question mark
+        Then the box "0-0" should shows a question mark
         And in the mines screen should be shown a : "15"
 
     @done
     Scenario: Revealing a box
-        When the user reveal the box "0-0"
-        Then the box "0-0" should show its content
+        When the user reveal the box "1-1"
+        Then the box "1-1" should show :"8"
     @done
     Scenario: Revealing a box with a mine
         When the user reveal the box "0-0"
@@ -79,28 +79,28 @@ Feature: Minesweeper
         Then the display shows a game over message
     @done
     Scenario Outline: Revealing a box with a mine and reveal all mines
-        When the user reveal the box "0-0"
-        Then the <box> displays <display>
+        When the user reveal the box <box>
+        Then the box <box> should show a mine
 
         Examples:
-            | box   | display |
-            | '0-0' | *       |
-            | '0-1' | *       |
-            | '0-2' | *       |
-            | '0-3' | *       |
-            | '0-4' | *       |
-            | '0-5' | *       |
-            | '0-6' | *       |
-            | '1-0' | *       |
-            | '2-1' | *       |
-            | '2-0' | *       |
-            | '2-1' | *       |
-            | '2-2' | *       |
-            | '2-3' | *       |
-            | '2-4' | *       |
-            | '2-5' | *       |
+            | box   |
+            | '0-0' |
+            | '0-1' | 
+            | '0-2' |
+            | '0-3' |
+            | '0-4' |
+            | '0-5' |
+            | '0-6' |
+            | '1-0' |
+            | '2-1' |
+            | '2-0' |
+            | '2-1' |
+            | '2-2' |
+            | '2-3' |
+            | '2-4' |
+            | '2-5' |
 
-    @done
+     @done
     Scenario Outline: Reavealing a box without a mine, showing the number of adjacent mines
         When the user reveal the box <box>
         Then the <box> should show the following value: <adjacent_mines>
@@ -117,7 +117,7 @@ Feature: Minesweeper
             | '3-6' | '1'              |
             | '4-0' | '0'              |
 
-   @done
+    @done
     Scenario: Winning by putting a flag on all box with a mine
         When the user puts a flag on : "0-0"
         And the user puts a flag on : "0-1"
@@ -138,7 +138,7 @@ Feature: Minesweeper
         Then the displays shows a winning message
         And in the mines screen should be shown a : "0"
 
-    @wip
+    @done
     Scenario Outline: Winning by reavealing all boxes without a mine
         When the user reveal the box "1-1"
         And the user reveal the box "1-3"

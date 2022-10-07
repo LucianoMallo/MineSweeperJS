@@ -1,78 +1,70 @@
-const board = [
-  ["mine", "mine", "mine", "mine", "mine", "mine", "mine"],
-  ["mine", "number", "mine", "number", "number", "number", "number"],
-  ["mine", "mine", "mine", "mine", "mine", "mine", "number"],
-  ["number", "number", "mine", "number", "number", "number", "number"],
-  ["number", "number", "number", "number", "number", "number", "number"],
-  ["number", "number", "number", "number", "number", "number", "number"],
-];
-const num_of_rows = board.length;
-const num_of_cols = board[0].length;
-let mines_counter = 16;
+const num_of_rows = testBoard.length;
+const num_of_cols = testBoard[1].length;
+let mines_counter = 8;
 let timer = null;
 let initCancelTimer;
-let field;
 let mine_emoji = "&#x2600;";
-const mines = [];
-let exploded = false;
 let win = false;
-const cellsWithoutMines = [];
-
-// Manage of the event listeners with right click
-window.addEventListener("contextmenu", (e) => e.preventDefault());
-window.addEventListener("contextmenu", (e) => putInterrogantOrFlag(e.target));
-
-window.onload = function () {
-  document.getElementById("Mines_Screen").innerText = mines_counter;
-  document.getElementById("Timer_Screen").innerText = "00";
-  field = document.getElementById("board");
-  startGame();
+let started = false;
+let test = true; // if it's true loads an fixed board to run tests. On the testBoard.js can be created the board to test or use the one thats already exists
+let board = [];
+let defaultCell = {
+  containsMine: false,
+  reveal: false,
+  tag: " ",
+  minesAdjacent: 0,
 };
 
-function startGame() {
+document.getElementById("Mines_Screen").innerText = mines_counter;
+document.getElementById("Timer_Screen").innerText = "00";
+appInit();
+
+function appInit() {
   document.getElementById("board").appendChild(createTable());
-  fillBoard();
-  //randomCell(); //To implement Random must be define
-  game();
+  fillBoardWithDefaultCell(board);
 }
 
-function createTable() {
-  var table, row, td, i, j;
-  table = document.createElement("table");
-  for (i = 0; i < num_of_rows; i++) {
-    row = document.createElement("tr");
-    for (j = 0; j < num_of_cols; j++) {
-      td = document.createElement("td");
-      td.id = cellID(i, j);
-      td.at = board[(i, j)];
-      td.classList.add("hidden");
-      row.appendChild(td);
-    }
-    table.appendChild(row);
+function puttingMines(board) {
+  if (!test) {
+    puttingRandomMines(board);
+  } else {
+    putTestMines(board);
   }
-  return table;
 }
 
-function fillBoard() {
-  let cell;
-  for (i = 0; i < num_of_rows; i++) {
-    for (j = 0; j < num_of_cols; j++) {
-      cell = document.getElementById(cellID(i, j));
-      if (board[i][j] == "mine") {
-        mines.push(cell);
-      }
-      if (board[i][j] == "number") {
-        cellsWithoutMines.push(cell);
-      }
-      cell.classList.add(board[i][j]);
-      cleanCell(cell);
-      //cell.innerText = board[i][j]; //Can be uncommented to see the board.
+function fillBoardWithDefaultCell() {
+  for (let i = 0; i < num_of_rows; i++) {
+    board[i] = [];
+    for (let j = 0; j < num_of_cols; j++) {
+      board[i].push({ ...defaultCell });
     }
   }
 }
 
-function cellID(i, j) {
-  return "cell-" + i + "-" + j;
+function fillBoardWithMineAndNumbers() {
+  puttingMines(board);
+  getNumbersOfCells(board);
+}
+
+function revealingACell(x, y) {
+  let cell = board[x][y];
+  if (!cell.reveal) {
+    if (cell.tag == " ") {
+      cell.reveal = true;
+
+      if (!started) {
+        started = true;
+        fillBoardWithMineAndNumbers();
+      }
+      checkForAMine(x, y);
+      if (cell.minesAdjacent == 0&&!cell.containsMine) {
+        revealAdjacent(x, y);
+      }
+    }
+    checkForWiningRevealingAllCells(board);
+    printOnHtml(board);
+  }
+  if (win) {winning();}
 }
 
 function restartGame() {
@@ -81,107 +73,77 @@ function restartGame() {
   mines_counter = 16;
   clearInterval(initCancelTimer);
   initCancelTimer = null;
-  fillBoard();
+  board = [];
+  fillBoardWithDefaultCell(board);
+  puttingMines(board);
+  getNumbersOfCells(board);
   win = false;
+  cleanHTMLCells(board);
+  printOnHtml(board);
 }
 
-function putInterrogantOrFlag(cell) {
-  if (
-    cell.classList.contains("question") ||
-    cell.classList.contains("flagged")
-  ) {
-    if (cell.classList.contains("question")) {
-      cell.classList.remove("question");
-      document.getElementById(cell.id).innerText = "";
+function putInterrogantOrFlag(x, y) {
+  let cell = board[x][y];
+  if (cell.tag == "question" || cell.tag == "flagged") {
+    if (cell.tag == "question") {
+      cell.tag = " ";
       mines_counter += 1;
-      document.getElementById("Mines_Screen").innerText = mines_counter;
     }
-    if (cell.classList.contains("flagged")) {
-      cell.classList.replace("flagged", "question");
-      document.getElementById(cell.id).innerText = "?";
+    if (cell.tag == "flagged") {
+      cell.tag = "question";
     }
-  } else if (cell.classList.contains("hidden")) {
-    cell.classList.add("flagged");
-    document.getElementById(cell.id).innerText = "F";
+  } else if (!cell.reveal) {
+    cell.tag = "flagged";
     mines_counter -= 1;
-    document.getElementById("Mines_Screen").innerText = mines_counter;
-    checkForWiningWithFlags();
+    checkForWiningWithFlags(board);
+  }
+  printOnHtml(board);
+
+  if (win) {
+    winning();
+  }
+  
+}
+
+function checkForAMine(x, y) {
+  let cell = board[x][y];
+  if (cell.containsMine) {
+    revealingMines(board);
+    printOnHtml(board);
+    gameOver();
   }
 }
 
-function game() {
-  field.addEventListener("click", (e) => revealingACell(e.target));
-}
-
-function revealingACell(cell) {
-  if (
-    !cell.classList.contains("flagged") &&
-    !cell.classList.contains("question") &&
-    !exploded &&
-    !win
-  ) {
-    if (cell.classList.contains("hidden")) {
-      cell.classList.replace("hidden", "revealed");
-      checkForAMine(cell);
-      checkForWiningRevealingAllCells();
-      console.log(cell.classList)
-      if (win) {
-        winning();
-      } else {
-        if (cell.innerText == "0") {
-          idString = cell.id.split("-");
-          let x = parseInt(idString[1]);
-          let y = parseInt(idString[2]);
-          revealAdjacent(x, y);
-        }
+function revealingMines(board) {
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board[1].length; j++) {
+      if (board[i][j].containsMine) {
+        board[i][j].reveal = true;
       }
     }
   }
 }
 
-function checkForAMine(cell) {
-  if (cell.classList.contains("mine")) {
-    exploded = true;
-    revealingMines();
-    gameOver();
-  }
-  if (!exploded) {
-    getNumberOfCell(cell);
-  }
-}
-
-function revealingMines() {
-  mines.forEach((mine) => {
-    if (
-      !mine.classList.contains("flagged") &&
-      !mine.classList.contains("question")
-    ) {
-      mine.classList.replace("hidden", "revealed");
-      document.getElementById(mine.id).innerHTML = mine_emoji;
+function checkForWiningWithFlags(board) {
+  for (i = 0; i < board.length; i++) {
+    for (j = 0; j < board[1].length; j++) {
+      let cell = board[i][j];
+      if (cell.tag == "flagged" && cell.containsMine) {
+        win = true;
+      }
+      if (cell.tag != "flagged" && cell.containsMine) {
+        win = false;
+        return;
+      }
     }
-  });
-}
-
-function checkForWiningWithFlags() {
-  mines.forEach((mine) => {
-    if (mine.classList.contains("flagged")) {
-      win = true;
-    } else {
-      win = false;
-    }
-  });
-  if (win) {
-    winning();
   }
 }
-function checkForWiningRevealingAllCells() {
-  for (i = 0; i < num_of_rows; i++) {
-    for (j = 0; j < num_of_cols; j++) {
-      cell = document.getElementById(cellID(i, j));
-      if (
-        cell.classList.contains("number") &&
-        cell.classList.contains("hidden")
-      ) {
+function checkForWiningRevealingAllCells(board) {
+  console.log(win);
+  for (i = 0; i < board.length; i++) {
+    for (j = 0; j < board[1].length; j++) {
+      let cell = board[i][j];
+      if (!cell.reveal && !cell.containsMine) {
         win = false;
         return;
       } else {
@@ -191,24 +153,39 @@ function checkForWiningRevealingAllCells() {
   }
 }
 
-function gameOver() {
-  clearInterval(initCancelTimer);
-  initCancelTimer = null;
-  window.alert("Game Over Baby");
+function puttingRandomMines(board) {
+  let mineLayed = 0;
+  while (mineLayed < mines_counter) {
+    let cellRow = Math.floor(Math.random() * board.length);
+    let cellCol = Math.floor(Math.random() * board[1].length);
+    let cell = board[cellRow][cellCol];
+    if (!cell.containsMine && !cell.reveal) {
+      cell.containsMine = true;
+      mineLayed++;
+    }
+  }
 }
- function winning() {
-  clearInterval(initCancelTimer);
-  initCancelTimer = null;
-  setTimeout(function() {
-  	window.alert("Okey you are a crack you win this");
-  },10)
-  
+function putTestMines() {
+  for (i = 0; i < board.length; i++) {
+    for (j = 0; j < board[1].length; j++) {
+      let cell = board[i][j];
+      if (testBoard[i][j] == "mine") {
+        cell.containsMine = true;
+      }
+    }
+  }
+}
+function getNumbersOfCells(board) {
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board[1].length; j++) {
+      if (!board[i][j].containsMine) {
+        board[i][j].minesAdjacent = getNumberOfACell(i, j);
+      }
+    }
+  }
 }
 
-function getNumberOfCell(cell) {
-  idString = cell.id.split("-");
-  let x = parseInt(idString[1]);
-  let y = parseInt(idString[2]);
+function getNumberOfACell(x, y) {
   let mines_ad = 0;
   if (haveBomb(x - 1, y)) {
     mines_ad++;
@@ -234,7 +211,6 @@ function getNumberOfCell(cell) {
   if (haveBomb(x - 1, y + 1)) {
     mines_ad++;
   } //down left
-  document.getElementById(cell.id).innerHTML = String(mines_ad);
   return mines_ad;
 }
 
@@ -246,7 +222,7 @@ function haveBomb(x, y) {
   if (y < 0 || y >= num_of_cols) {
     return false;
   }
-  if (board[x][y] == "mine") {
+  if (board[x][y].containsMine) {
     return true;
   } else {
     return false;
@@ -258,13 +234,13 @@ function revealAdjacent(x, y) {
     for (let j = y - 1; j <= y + 1; j++) {
       if (i < 0 || j < 0 || i >= board.length || j >= board[1].length) continue;
 
-      let cell = document.getElementById(cellID(i, j));
+      let cell = board[i][j];
 
-      if (cell.classList.contains("revealed")) {
+      if (cell.reveal) {
         continue;
       }
 
-      revealingACell(cell);
+      revealingACell(i, j);
     }
   }
 }
@@ -276,29 +252,71 @@ function startTimer() {
   }
 }
 
+function stopTimer() {
+  clearInterval(initCancelTimer);
+  //initCancelTimer = null;
+}
+
 function incrementSeconds() {
   timer.innerText = parseInt(timer.innerText) + 1;
 }
 
-function cleanCell(cell) {
-  cell.classList.remove("question");
-  cell.classList.remove("flagged");
-  cell.classList.remove("revealed");
-  document.getElementById(cell.id).innerText = "";
-  cell.classList.add("hidden");
-  exploded = false;
-}
-
-function randomCell() {
-  let mineLayed = 0;
-  while (mineLayed != mines_counter) {
-    let cellRow = Math.floor(Math.random() * num_of_rows);
-    let cellCol = Math.floor(Math.random() * num_of_cols);
-    cell = document.getElementById(cellID(cellRow, cellCol));
-    console.log(cell);
-    if (!mines.includes(cell)) {
-      cell.classList.add("mine");
-      mineLayed++;
+function cleanHTMLCells(board) {
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board[1].length; j++) {
+      let htmlCell = document.getElementById(cellID(i, j));
+      htmlCell.classList.add("hidden");
+      htmlCell.classList.remove("number");
+      htmlCell.classList.remove("mine");
+      htmlCell.classList.remove("revealed");
+      htmlCell.innerText == "";
     }
   }
+}
+
+function gameOver() {
+  stopTimer();
+  window.alert("Game Over Baby");
+}
+function winning() {
+  stopTimer();
+  window.alert("Okey you are a crack you win this");
+}
+
+function printOnHtml(board) {
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board[1].length; j++) {
+      let memoryCell = board[i][j];
+      let htmlCell = document.getElementById(cellID(i, j));
+      if (memoryCell.reveal) {
+        if (memoryCell.containsMine) {
+          if (memoryCell.tag != "question" || memoryCell.tag != "flagged") {
+            htmlCell.innerHTML = mine_emoji;
+            htmlCell.classList.remove("hidden");
+            htmlCell.classList.add("mine");
+            htmlCell.classList.add("revealed");
+          }
+        } else {
+          if (memoryCell.tag != "question" || !memoryCell.tag != "flagged") {
+            htmlCell.innerText = memoryCell.minesAdjacent;
+            htmlCell.classList.remove("hidden");
+            htmlCell.classList.add("number");
+            htmlCell.classList.add("revealed");
+          }
+        }
+      }
+      if (memoryCell.tag == "question") {
+        htmlCell.innerText = "?";
+      }
+
+      if (memoryCell.tag == "flagged") {
+        htmlCell.innerText = "F";
+      }
+      if (memoryCell.tag == " " && !memoryCell.reveal) {
+        htmlCell.innerText = "";
+      }
+    }
+  }
+
+  document.getElementById("Mines_Screen").innerText = mines_counter;
 }
