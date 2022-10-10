@@ -1,8 +1,9 @@
 let timer = null;
 let initCancelTimer;
 let mine_emoji = "&#x2600;";
+let flag_emoji=	"🚩";
 let game;
-let testing = true;
+let testing = false;//change to true to test the functions with a fixed board. 
 
 var ms = null;
 if (testing) {
@@ -14,20 +15,20 @@ if (testing) {
 window.onload = function () {
   document.getElementById("Mines_Screen").innerText = game.getMines();
   document.getElementById("Timer_Screen").innerText = "00";
-  document.getElementById("board").appendChild(createTable(game.board));
-  addClicksListeners(game);
+  document.getElementById("board").appendChild(createTable());
 };
 
 //Create a table on the html.
-function createTable(board) {
+function createTable() {
   var table, row, td, i, j;
   table = document.createElement("table");
-  for (i = 0; i < board.length; i++) {
+  for (let i = 0; i < game.num_of_rows; i++) {
     row = document.createElement("tr");
-    for (j = 0; j < board[1].length; j++) {
+    for (let j = 0; j < game.num_of_cols; j++) {
       td = document.createElement("td");
       td.id = cellID(i, j);
       row.appendChild(td);
+      addClicksListeners(td, i, j);
       td.classList.add("hidden");
     }
     table.appendChild(row);
@@ -39,31 +40,39 @@ function createTable(board) {
 function cellID(i, j) {
   return "cell-" + i + "-" + j;
 }
-function addClicksListeners(game) {
-  let cells = document.querySelectorAll("td");
-  cells.forEach((cell) =>
-    cell.addEventListener("click", (event) => {
-      idString = event.target.id.split("-");
-      let cellX = idString[1];
-      let cellY = idString[2];
-      game.revealingACell(cellX, cellY);
-      printOnHtml();
-    })
-  );
-  cells.forEach((cell) =>
-    cell.addEventListener("contextmenu", (event) => {
-      event.preventDefault();
-      idString = event.target.id.split("-");
-      let cellX = idString[1];
-      let cellY = idString[2];
-      game.putInterrogantOrFlag(cellX, cellY);
-      printOnHtml();
-    })
-  );
+function addClicksListeners(td, i, j) {
+  
+  td.addEventListener("contextmenu", (event) => {
+    event.preventDefault();
+  });
+
+  td.addEventListener("mousedown", function (event) {
+    if (!game.board[i][j].reveal) {
+      switch (event.which) {
+        case 1:
+          game.revealingACell(i, j);
+          break;
+
+        case 3:
+          game.putInterrogantOrFlag(i, j);
+          break;
+
+        default:
+          break;
+      }
+    }
+    startTimer()
+    printOnHtml();
+    checkWinningOrLost();
+  });
 }
 
 function restartGame() {
-  game = new MineSweeper(testBoard);
+  if (testing) {
+    game = new MineSweeper(testBoard);
+  } else {
+    game = new MineSweeper();
+  }
   document.getElementById("Mines_Screen").innerText = game.getMines();
   document.getElementById("Timer_Screen").innerText = "00";
   document.getElementById("board");
@@ -81,7 +90,7 @@ function startTimer() {
 }
 function stopTimer() {
   clearInterval(initCancelTimer);
-  //initCancelTimer = null;
+  initCancelTimer = null;
 }
 function incrementSeconds() {
   timer.innerText = parseInt(timer.innerText) + 1;
@@ -100,6 +109,20 @@ function cleanHTMLCells() {
     }
   }
 }
+
+function checkWinningOrLost() {
+  switch (game.getGameState()) {
+      case "lost":
+          gameOver();
+          break
+      case "win":
+         winning();
+          break
+      default:
+          break
+  }
+}
+
 function gameOver() {
   stopTimer();
   window.alert("Game Over Baby");
@@ -135,7 +158,7 @@ function printOnHtml() {
       }
 
       if (memoryCell.tag == "flagged") {
-        htmlCell.innerText = "F";
+        htmlCell.innerText = flag_emoji;
       }
       if (memoryCell.tag == " " && !memoryCell.reveal) {
         htmlCell.innerText = "";
@@ -144,4 +167,5 @@ function printOnHtml() {
   }
 
   document.getElementById("Mines_Screen").innerText = game.getMines();
+  
 }

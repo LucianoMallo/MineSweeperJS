@@ -173,33 +173,33 @@ Feature: Minesweeper
     @done
     Scenario Outline: Reavealing a cell with no adjacent mines
         When the user reveal the box "4-0"
-        Then the box "4-0" should show its content
-        And the box "4-1" should show its content
-        And the box "3-0" should show its content
-        And the box "3-1" should show its content
-        And the box "5-0" should show its content
-        And the box "5-1" should show its content
+        Then the box "4-0" should show :"0"
+        And the box "4-1" should show :"1"
+        And the box "3-0" should show :"2"
+        And the box "3-1" should show :"4"
+        And the box "5-0" should show :"0"
+        And the box "5-1" should show :"0"
       
     @done
     Scenario: Reavealing a cell with no mine around - Revealing surrounding cells (recursively)
         When the user reveal the box "4-0"
-       Then the box "4-0" should show its content
-        And the box "4-1" should show its content
-        And the box "4-2" should show its content
-        And the box "4-3" should show its content
-        And the box "4-4" should show its content
-        And the box "4-5" should show its content
-        And the box "4-6" should show its content
-        And the box "3-0" should show its content
-        And the box "3-1" should show its content
-        And the box "3-3" should show its content
-        And the box "3-4" should show its content
-        And the box "3-5" should show its content
-        And the box "3-6" should show its content
-        And the box "5-0" should show its content
-        And the box "5-1" should show its content
-        And the box "5-2" should show its content
-        And the box "5-3" should show its content
-        And the box "5-4" should show its content
-        And the box "5-5" should show its content
-        And the box "5-6" should show its content
+       Then the box "4-0" should show :"0"
+        And the box "4-1" should show :"1"
+        And the box "4-2" should show :"1"
+        And the box "4-3" should show :"1"
+        And the box "4-4" should show :"0"
+        And the box "4-5" should show :"0"
+        And the box "4-6" should show :"0"
+        And the box "3-0" should show :"2"
+        And the box "3-1" should show :"4"
+        And the box "3-3" should show :"4"
+        And the box "3-4" should show :"3"
+        And the box "3-5" should show :"2"
+        And the box "3-6" should show :"1"
+        And the box "5-0" should show :"0"
+        And the box "5-1" should show :"0"
+        And the box "5-2" should show :"0"
+        And the box "5-3" should show :"0"
+        And the box "5-4" should show :"0"
+        And the box "5-5" should show :"0"
+        And the box "5-6" should show :"0"

@@ -46,7 +46,7 @@ When("the user puts a flag on : {string}", async (string) => {
 
 Then("the box {string} shows a flag", async (string) => {
   const cell = await page.locator("id=cell-" + string + "");
-  await expect(cell).toContainText('F');
+  await expect(cell).toContainText('🚩');
 });
 
 When("the user puts a question mark on : {string}", async (string) => {

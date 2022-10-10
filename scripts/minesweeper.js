@@ -15,12 +15,12 @@ class MineSweeper {
     this.getNumbersOfCells();
   }
 
-getNum_of_rows(){
-    return this.num_of_rows
-}
-getNum_of_cols(){
-    return this.num_of_cols
-}
+  getNum_of_rows() {
+    return this.num_of_rows;
+  }
+  getNum_of_cols() {
+    return this.num_of_cols;
+  }
 
   getMines() {
     return this.mines;
@@ -28,7 +28,6 @@ getNum_of_cols(){
   getGameState() {
     return this.gameState;
   }
- 
 
   countMines() {
     let mines = 0;
@@ -45,7 +44,7 @@ getNum_of_cols(){
     }
     return mines;
   }
-  CreateBoard(rows=8, cols=8, mines=10) {
+  CreateBoard(rows = 8, cols = 8, mines = 10) {
     let board = [];
     for (let i = 0; i < rows; i++) {
       board[i] = [];
@@ -128,23 +127,23 @@ getNum_of_cols(){
         cell.reveal = true;
         this.checkForAMine(x, y);
         if (cell.minesAdjacent == 0 && !cell.containsMine) {
-            this.revealAdjacent(x, y);
+          this.revealAdjacent(x, y);
         }
       }
-      this.checkForWiningRevealingAllCells();
+      if(this.gameState!="lost"){this.checkForWiningRevealingAllCells();}
+      
     }
   }
   revealAdjacent(x, y) {
     for (let i = x - 1; i <= x + 1; i++) {
       for (let j = y - 1; j <= y + 1; j++) {
-        if (i < 0 || j < 0 || i >= this.num_of_rows || j >= this.num_of_cols) continue;
-  
-        
-  
+        if (i < 0 || j < 0 || i >= this.num_of_rows || j >= this.num_of_cols)
+          continue;
+
         if (this.board[i][j].reveal) {
           continue;
         }
-  
+
         this.revealingACell(i, j);
       }
     }
@@ -152,7 +151,7 @@ getNum_of_cols(){
 
   checkForAMine(x, y) {
     if (this.board[x][y].containsMine) {
-        this.revealingMines();
+      this.revealingMines();
       this.gameState = "lost";
     }
   }
@@ -179,7 +178,7 @@ getNum_of_cols(){
     } else if (!cell.reveal) {
       cell.tag = "flagged";
     }
-    this.countMines();
+    this.mines = this.countMines();
     this.checkForWiningWithFlags();
   }
 
@@ -205,7 +204,7 @@ getNum_of_cols(){
           this.gameState = null;
           return;
         } else {
-            this.gameState = "win";
+          this.gameState = "win";
         }
       }
     }
