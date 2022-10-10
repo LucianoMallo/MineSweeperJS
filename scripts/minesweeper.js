@@ -6,8 +6,8 @@ const defaultCell = {
 };
 
 class MineSweeper {
-  constructor(testBoard = CreateBoard(8, 8, 10)) {
-    this.board = testBoard;
+  constructor(board = this.CreateBoard()) {
+    this.board = JSON.parse(JSON.stringify(board));
     this.num_of_rows = this.board.length;
     this.num_of_cols = this.board[1].length;
     this.mines = this.countMines();
@@ -28,6 +28,7 @@ getNum_of_cols(){
   getGameState() {
     return this.gameState;
   }
+ 
 
   countMines() {
     let mines = 0;
@@ -44,7 +45,7 @@ getNum_of_cols(){
     }
     return mines;
   }
-  CreateBoard(rows, cols, mines) {
+  CreateBoard(rows=8, cols=8, mines=10) {
     let board = [];
     for (let i = 0; i < rows; i++) {
       board[i] = [];
@@ -55,10 +56,10 @@ getNum_of_cols(){
 
     let mineLayed = 0;
     while (mineLayed < mines) {
-      let cellRow = Math.floor(Math.random() * rows.length);
-      let cellCol = Math.floor(Math.random() * cols.length);
+      let cellRow = Math.floor(Math.random() * rows);
+      let cellCol = Math.floor(Math.random() * cols);
 
-      if ([cellRow][cellCol]) {
+      if (!board[cellRow][cellCol].containsMine) {
         board[cellRow][cellCol].containsMine = true;
         mineLayed++;
       }
@@ -131,6 +132,21 @@ getNum_of_cols(){
         }
       }
       this.checkForWiningRevealingAllCells();
+    }
+  }
+  revealAdjacent(x, y) {
+    for (let i = x - 1; i <= x + 1; i++) {
+      for (let j = y - 1; j <= y + 1; j++) {
+        if (i < 0 || j < 0 || i >= this.num_of_rows || j >= this.num_of_cols) continue;
+  
+        
+  
+        if (this.board[i][j].reveal) {
+          continue;
+        }
+  
+        this.revealingACell(i, j);
+      }
     }
   }
 

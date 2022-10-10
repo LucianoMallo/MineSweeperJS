@@ -1,4 +1,4 @@
-let testBoard = [
+const testBoard = [
   [
     { ...defaultCell, containsMine: true },
     { ...defaultCell, containsMine: true },
