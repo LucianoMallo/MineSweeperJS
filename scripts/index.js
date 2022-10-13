@@ -3,7 +3,7 @@ let initCancelTimer;
 let mine_emoji = "&#x2600;";
 let flag_emoji=	"🚩";
 let game;
-let testing = false;//change to true to test the functions with a fixed board. 
+let testing = true;//change to true to test the functions with a fixed board. 
 
 var ms = null;
 if (testing) {

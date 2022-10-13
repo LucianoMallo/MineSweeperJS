@@ -14,7 +14,6 @@ Given("the board is loaded with the value:", async (dataTable) => {
   board = board.innerText;
   const field = await page.locator("data-testid=field");
   expect(board).toBe(field);
-  //return true;
 });
 
 Then("in the timer screen should be shown a : {string}", async (string) => {
